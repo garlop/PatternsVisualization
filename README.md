@@ -29,9 +29,11 @@ In order to execute the generator three patterns are expected, as follows:
 
 VisualizationGenerator.exe “Pattern to evaluate” DatabaseFile BinaryColumn
 
--Pattern to evaluate: Is the pattern to visualize, it has to be enclosed in double quotes (“) and do not include such character inside of the pattern itself. Each item in the pattern MUST be separated by the word AND in uppercase and spaces. Column names in the pattern have to be written exactly as they appear in the database, and so the values that are being compared. The only two valid operators for categorical items are (=, !=). Patterns can be of a maximum number of items of 4. A number of items in the pattern greater than that, will not work properly.
--DatabaseFile: A database file in csv format (file extension must be included in the name). In order for the csv format to work properly, is preferred that the values of the database do not contain a comma (,) because it might lead to a wrong file format.
--BinaryColumn: The name of the column used for pattern extraction in a binary classification that must exist in the database file. Since we are talking about a binary classification problem, it is expected for the column to only have two values.
+*Pattern to evaluate:* Is the pattern to visualize, it has to be enclosed in double quotes (“) and do not include such character inside of the pattern itself. Each item in the pattern MUST be separated by the word AND in uppercase and spaces. Column names in the pattern have to be written exactly as they appear in the database, and so the values that are being compared. The only two valid operators for categorical items are (=, !=). Patterns can be of a maximum number of items of 4. A number of items in the pattern greater than that, will not work properly.
+
+*DatabaseFile:* A database file in csv format (file extension must be included in the name). In order for the csv format to work properly, is preferred that the values of the database do not contain a comma (,) because it might lead to a wrong file format.
+
+*BinaryColumn:* The name of the column used for pattern extraction in a binary classification that must exist in the database file. Since we are talking about a binary classification problem, it is expected for the column to only have two values.
 
 ## Example:
 
