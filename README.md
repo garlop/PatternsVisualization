@@ -5,9 +5,9 @@ There are two items in the repository: The python code which, after the installa
 
 The code makes use of several python modules such as:
 
-*Dominate (For dynamic html generation): is a Python library for creating and manipulating HTML documents using an elegant DOM API. It allows you to write HTML pages in pure Python very concisely.
+- Dominate (For dynamic html generation): is a Python library for creating and manipulating HTML documents using an elegant DOM API. It allows you to write HTML pages in pure Python very concisely.
 https://github.com/Knio/dominate
-*Plotly (To create interactive plots): The interactive graphing library for Python
+- Plotly (To create interactive plots): The interactive graphing library for Python
 https://github.com/plotly/plotly.py
 
 In order to execute the code, it is necessary to have those modules installed in our python environment. Once we are prepared to execute the code, we need to put our database in the same folder than the application, as follows:
@@ -17,12 +17,12 @@ folder/
 |_  Data.csv
 
 ## Important Considerations:
-1.- Our software only works with databases that are in a valid .csv format. If the database to process is in any other format, it must be first converted before visualizations generation.
-2.- Our code is for categorical attributes preferently. Even though it supports numerical data, the visualizations for such kind of data are designed to fit with the style of the categorical ones.
-3.- Data needs to include a binary column used for pattern extraction, since the class value is a relevant part of the visualization process.
-4.- When comparing categorical attributes, the operator to indicate a value that the pattern needs for an attribute to have, is =. The operator to indicate a value that the pattern needs for an attribute to don't have, is !=.
-5.- Although is not expected to be used with numerical attributes, if such are included the operators valid to perform comparisons with them are (<, <=, >, >=).
-6.- When passing the attribute to the code, string values must be enclosed by single quotes ('), instead of double quotes (“). This is only for the attribute value, not for the attribute column name, as It will be seen below.
+1. Our software only works with databases that are in a valid .csv format. If the database to process is in any other format, it must be first converted before visualizations generation.
+1. Our code is for categorical attributes preferently. Even though it supports numerical data, the visualizations for such kind of data are designed to fit with the style of the categorical ones.
+1. Data needs to include a binary column used for pattern extraction, since the class value is a relevant part of the visualization process.
+1. When comparing categorical attributes, the operator to indicate a value that the pattern needs for an attribute to have, is =. The operator to indicate a value that the pattern needs for an attribute to don't have, is !=.
+1. Although is not expected to be used with numerical attributes, if such are included the operators valid to perform comparisons with them are (<, <=, >, >=).
+1. When passing the attribute to the code, string values must be enclosed by single quotes ('), instead of double quotes (“). This is only for the attribute value, not for the attribute column name, as It will be seen below.
 
 ## Execution parameters:
 In order to execute the generator three patterns are expected, as follows:
