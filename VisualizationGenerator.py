@@ -7,11 +7,25 @@ import pandas as pd
 import webbrowser
 
 patternName = (sys.argv[1])
+originalPattern = patternName
 patternName = patternName.split("AND")
 database = (sys.argv[2])
 targetAttribute = (sys.argv[3])
 patternSize = len(patternName)
 df = pd.read_csv(database)
+
+def opposite(pattern):
+    if "=" in pattern:
+        if "<" in pattern:
+            pattern = pattern.replace("<=", ">")
+        elif ">" in pattern:
+            pattern = pattern.replace(">=", "<")
+    else:
+        if ">" in pattern:
+            pattern = pattern.replace(">", "<=")
+        elif "<" in pattern:
+            pattern = pattern.replace("<", ">=")
+    return pattern
 
 def generatePatternPage(pattern, pageNumber, df, targetAttribute):
     different = None
@@ -22,12 +36,20 @@ def generatePatternPage(pattern, pageNumber, df, targetAttribute):
         different = True
         field = separation[0].strip()
         value = separation[1].strip().replace("'","")
-    else:
+    elif len(pattern.split("=")) == 2:
         separation = pattern.split("=")
         different = False
         field = separation[0].strip()
         value = separation[1].strip().replace("'","")
-        for separator in ["<", ">", ">=", "<="]:
+        for separator in [">=", "<="]:
+            if len(pattern.split(separator)) == 2:
+                separador = separator
+                different = None
+                separation = pattern.split(separador)
+                field = separation[0].strip()
+                value = separation[1].strip().replace("'","")
+    else:
+        for separator in [">", "<"]:
             if len(pattern.split(separator)) == 2:
                 separador = separator
                 different = None
@@ -71,16 +93,24 @@ def generatePatternPage(pattern, pageNumber, df, targetAttribute):
         fig.write_html(str(pageNumber)+'.html', default_width='100%', default_height='100%')
 
     else:
-        dfpattern = df.groupby([field, targetAttribute]).size().reset_index().rename(columns={0:'count'})
+        dfpattern = df
 
         if separador == "<=":
-            dfpattern[" "] =  dfpattern[field].map(lambda x : 'Item Compliant' if x <= float(value.replace(",",".")) else 'Not Item Compliant')
+            dfpattern[" "] =  dfpattern[field].map(lambda x : 'Item compliant' if x <= float(value.replace(",",".")) else 'Not Item compliant')
+            dfpattern[field] =  dfpattern[field].map(lambda x : pattern if x <= float(value.replace(",",".")) else opposite(pattern) )
+            dfpattern = dfpattern.groupby([" " , field, targetAttribute]).size().reset_index().rename(columns={0:'count'})
         elif separador == "<":
-            dfpattern[" "] =  dfpattern[field].map(lambda x : 'Item Compliant' if x < float(value.replace(",",".")) else 'Not Item Compliant')
+            dfpattern[" "] =  dfpattern[field].map(lambda x : 'Item compliant' if x < float(value.replace(",",".")) else 'Not Item compliant' )
+            dfpattern[field] =  dfpattern[field].map(lambda x : pattern if x < float(value.replace(",",".")) else opposite(pattern) )
+            dfpattern = dfpattern.groupby([" " , field, targetAttribute]).size().reset_index().rename(columns={0:'count'})
         elif separador == ">=":
-            dfpattern[" "] =  dfpattern[field].map(lambda x : 'Item Compliant' if x >= float(value.replace(",",".")) else 'Not Item Compliant')
+            dfpattern[" "] =  dfpattern[field].map(lambda x : 'Item compliant' if x >= float(value.replace(",",".")) else 'Not Item compliant' )
+            dfpattern[field] =  dfpattern[field].map(lambda x : pattern if x >= float(value.replace(",",".")) else opposite(pattern) )
+            dfpattern = dfpattern.groupby([" " , field, targetAttribute]).size().reset_index().rename(columns={0:'count'})
         else:
-            dfpattern[" "] =  dfpattern[field].map(lambda x : 'Item Compliant' if x > float(value.replace(",",".")) else 'Not Item Compliant')
+            dfpattern[" "] =  dfpattern[field].map(lambda x : 'Item compliant' if x > float(value.replace(",",".")) else 'Not Item compliant')
+            dfpattern[field] =  dfpattern[field].map(lambda x : pattern if x > float(value.replace(",",".")) else opposite(pattern))
+            dfpattern = dfpattern.groupby([" " , field, targetAttribute]).size().reset_index().rename(columns={0:'count'})
     
         dfpattern["Class"] = ["|"+str(val)+"|" for val in dfpattern["Class"]]
 
@@ -91,7 +121,7 @@ def generatePatternPage(pattern, pageNumber, df, targetAttribute):
             'x':0.5,
             'xanchor': 'center',
             'yanchor': 'top'}, legend=dict(
-            title=None, orientation="h", y=-0.6, yanchor="bottom", x=0.5, xanchor="center"
+            title=None, orientation="h", y=1.1, yanchor="bottom", x=0.5, xanchor="center"
         ))
         fig.write_html(str(pageNumber)+'.html', default_width='100%', default_height='100%')
 
@@ -105,7 +135,7 @@ with doc.head:
 with doc:
     h1('Pattern Visualization')
     h2('Pattern:')
-    pre(patternName)
+    pre(originalPattern)
     with div():
         for i in range(patternSize):
             hr()
